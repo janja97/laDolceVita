@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Dolce Vita — Kafić & Bar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:wght@300;400;500&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --espresso: #2c1810;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --warm-gray: #8b7355;
+    --dark: #1a0f08;
+    --white: #fdfaf5;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--dark); color: var(--cream); font-family: 'Cormorant Garamond', serif; overflow-x:hidden; }
+
+  /* HERO */
+  .hero {
+    height: 100vh;
+    background: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1600&q=80') center/cover no-repeat;
+    position: relative;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+  }
+  .hero::before {
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(to bottom, rgba(26,15,8,0.5) 0%, rgba(26,15,8,0.8) 100%);
+  }
+  .hero-content { position: relative; z-index:2; }
+  .hero-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 10vw, 8rem);
+    font-weight: 900;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1;
+    letter-spacing: -2px;
+    text-shadow: 0 4px 30px rgba(201,168,76,0.4);
+  }
+  .hero-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 1rem;
+  }
+  .hero-divider {
+    width: 80px; height: 1px;
+    background: var(--gold);
+    margin: 1.5rem auto;
+  }
+  .hero-tagline {
+    font-size: 1.2rem;
+    color: var(--cream);
+    opacity: 0.8;
+    font-weight: 300;
+  }
+  .scroll-hint {
+    position: absolute; bottom: 2rem; left:50%; transform:translateX(-50%);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 3px; color: var(--gold);
+    text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+  /* NAV */
+  nav {
+    background: var(--dark);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    position: sticky; top:0; z-index:100;
+  }
+  .nav-inner {
+    max-width: 1200px; margin:0 auto;
+    display: flex; gap: 0; overflow-x:auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display:none; }
+  .nav-btn {
+    flex-shrink: 0;
+    padding: 1rem 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    cursor: pointer;
+    border: none; background: none;
+    transition: color 0.3s;
+    white-space: nowrap;
+  }
+  .nav-btn:hover, .nav-btn.active { color: var(--gold); }
+
+  /* SECTIONS */
+  .section { max-width: 1200px; margin: 0 auto; padding: 5rem 1.5rem; }
+  .section-header {
+    text-align: center; margin-bottom: 3rem;
+  }
+  .section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--gold);
+    display: block; margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700; font-style: italic;
+    color: var(--white);
+    line-height: 1.1;
+  }
+  .section-divider {
+    width: 60px; height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 1.5rem auto 0;
+  }
+
+  /* MENU GRID */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 0;
+  }
+  .menu-item {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    transition: background 0.3s;
+  }
+  .menu-item:hover { background: rgba(201,168,76,0.03); padding-left: 0.5rem; }
+  .item-info { flex:1; padding-right: 1rem; }
+  .item-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; color: var(--white);
+    font-weight: 400;
+  }
+  .item-desc {
+    font-size: 0.82rem;
+    color: var(--warm-gray);
+    margin-top: 0.25rem;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+  .item-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    color: var(--gold);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .category-separator {
+    grid-column: 1 / -1;
+    display: flex; align-items: center; gap: 1rem;
+    padding: 2rem 0 1rem;
+  }
+  .cat-line { flex:1; height:1px; background: rgba(201,168,76,0.2); }
+  .cat-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-style: italic;
+    color: var(--gold-light);
+  }
+
+  /* ABOUT */
+  .about-section {
+    background: linear-gradient(135deg, #1a0f08 0%, #2c1810 50%, #1a0f08 100%);
+    border-top: 1px solid rgba(201,168,76,0.15);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+  .about-inner {
+    max-width: 1200px; margin: 0 auto;
+    padding: 5rem 1.5rem;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center;
+  }
+  @media(max-width:768px) { .about-inner { grid-template-columns:1fr; gap:2rem; } }
+  .about-img {
+    height: 450px;
+    background: url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80') center/cover;
+    border-radius: 2px;
+    position: relative;
+  }
+  .about-img::after {
+    content:''; position:absolute; inset:-8px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .about-text p {
+    font-size: 1.05rem;
+    color: var(--cream);
+    opacity: 0.8;
+    line-height: 1.9;
+    margin-bottom: 1rem;
+    font-weight: 300;
+  }
+  .about-stats {
+    display: flex; gap: 2rem; margin-top: 2rem;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; color: var(--gold);
+    display: block; line-height:1;
+  }
+  .stat-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem; letter-spacing:2px;
+    text-transform:uppercase; color: var(--warm-gray);
+  }
+
+  /* GALLERY */
+  .gallery {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 250px 250px;
+    gap: 4px;
+  }
+  @media(max-width:600px) { .gallery { grid-template-columns:1fr 1fr; grid-template-rows:200px 200px 200px; } }
+  .gallery-item {
+    background-size: cover; background-position: center;
+    position: relative; overflow:hidden;
+    cursor: pointer;
+  }
+  .gallery-item:first-child { grid-row: 1/3; }
+  @media(max-width:600px) { .gallery-item:first-child { grid-row:auto; grid-column:1/3; } }
+  .gallery-item::after {
+    content:''; position:absolute; inset:0;
+    background: rgba(26,15,8,0.4);
+    transition: opacity 0.4s;
+  }
+  .gallery-item:hover::after { opacity:0; }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    border-top: 1px solid rgba(201,168,76,0.15);
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-style: italic;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .footer-info {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem; letter-spacing:2px;
+    color: var(--warm-gray); margin-bottom: 0.5rem;
+    line-height: 2;
+  }
+  .footer-hours {
+    color: var(--cream); opacity:0.5;
+    font-size: 0.85rem; margin-top:0.5rem;
+  }
+
+  /* ANIMATIONS */
+  .fade-in { opacity:0; transform:translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-in.visible { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="hero-logo">La Dolce Vita</div>
+    <div class="hero-sub">Kafić & Bistro Bar — Sarajevo</div>
+    <div class="hero-divider"></div>
+    <div class="hero-tagline">Gdje svaka šoljica priča svoju priču</div>
+  </div>
+  <div class="scroll-hint">↓ Scroll</div>
+</section>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showSection('kave')">☕ Kave</button>
+    <button class="nav-btn" onclick="showSection('hladna')">🧊 Hladna pića</button>
+    <button class="nav-btn" onclick="showSection('sokovi')">🍊 Sokovi & čajevi</button>
+    <button class="nav-btn" onclick="showSection('pivo')">🍺 Piva</button>
+    <button class="nav-btn" onclick="showSection('vino')">🍷 Vina</button>
+    <button class="nav-btn" onclick="showSection('spirits')">🥃 Spirits & kokteli</button>
+    <button class="nav-btn" onclick="showSection('hrana')">🥐 Hrana</button>
+    <button class="nav-btn" onclick="showSection('deserti')">🍰 Deserti</button>
+  </div>
+</nav>
+
+<!-- MENU SECTION -->
+<div id="menu-section">
+  <div class="section">
+    <div class="section-header fade-in">
+      <span class="section-label">Naš menu</span>
+      <h2 class="section-title">Sve za vaš užitak</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="menu-grid" id="menu-content">
+
+      <!-- KAVE -->
+      <div class="category-separator" data-cat="kave">
+        <div class="cat-line"></div>
+        <span class="cat-title">☕ Tople kave</span>
+        <div class="cat-line"></div>
+      </div>
+
+      <div class="menu-item"><div class="item-info"><div class="item-name">Espresso</div><div class="item-desc">Klasični talijanski espresso, 30ml punog tijela</div></div><div class="item-price">2,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Doppio Espresso</div><div class="item-desc">Dupla doza bogatog espressa za pravo buđenje</div></div><div class="item-price">3,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Macchiato</div><div class="item-desc">Espresso s malo toplog mlijeka i pjene</div></div><div class="item-price">2,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Cappuccino</div><div class="item-desc">Espresso, toplo mlijeko i svilena pjena — klasik</div></div><div class="item-price">3,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Flat White</div><div class="item-desc">Dupli ristretto sa malo mikropjene, australski favorit</div></div><div class="item-price">3,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Latte</div><div class="item-desc">Espresso s bogatim toplim mlijekom i laganom pjenom</div></div><div class="item-price">3,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Cortado</div><div class="item-desc">Espresso razrijeđen jednakom količinom toplog mlijeka</div></div><div class="item-price">3,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Lungo</div><div class="item-desc">Izduženi espresso, blaži intenzitet, veći volumen</div></div><div class="item-price">2,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Americano</div><div class="item-desc">Espresso razrijeđen vrućom vodom, američki stil</div></div><div class="item-price">2,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Turska kafa</div><div class="item-desc">Tradicionalno kuhana, poslužena s rahatlukom</div></div><div class="item-price">2,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Caramel Latte</div><div class="item-desc">Espresso, mlijeko i domaći karamel sirup</div></div><div class="item-price">4,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Hazelnut Cappuccino</div><div class="item-desc">Cappuccino s aromom lješnjaka i prahom cimeta</div></div><div class="item-price">4,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Irish Coffee</div><div class="item-desc">Jaka kava, Irish whiskey, smeđi šećer i šlag</div></div><div class="item-price">7,00 KM</div></div>
+
+      <!-- HLADNA PIĆA -->
+      <div class="category-separator" data-cat="hladna">
+        <div class="cat-line"></div>
+        <span class="cat-title">🧊 Hladna pića</span>
+        <div class="cat-line"></div>
+      </div>
+
+      <div class="menu-item"><div class="item-info"><div class="item-name">Iced Espresso</div><div class="item-desc">Dupli espresso nad ledom, osvježavajuće i jako</div></div><div class="item-price">3,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Iced Latte</div><div class="item-desc">Espresso, hladno mlijeko i led — savršen za ljeto</div></div><div class="item-price">4,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Cold Brew</div><div class="item-desc">12-satno hladno ekstrakcijsko kuhanje, glatki okus</div></div><div class="item-price">5,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Nitro Cold Brew</div><div class="item-desc">Cold brew s dušikovim mjehurićima, kremasta tekstura</div></div><div class="item-price">6,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Frappuccino</div><div class="item-desc">Blendani espresso s mlijekom i ledom, po vašem ukusu</div></div><div class="item-price">5,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Ledeni čaj — breskva</div><div class="item-desc">Domaći ledeni čaj od breskve, svježa metvica</div></div><div class="item-price">3,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Ledeni čaj — citrusi</div><div class="item-desc">Crni čaj, limun, naranča i med</div></div><div class="item-price">3,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Limonada — klasik</div><div class="item-desc">Svježe cijeđeni limuni, šećer, menta, led</div></div><div class="item-price">3,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Limonada — malina</div><div class="item-desc">Limonada s domaćim sirupom od malina</div></div><div class="item-price">4,00 KM</div></div>
+
+      <!-- SOKOVI & ČAJEVI -->
+      <div class="category-separator" data-cat="sokovi">
+        <div class="cat-line"></div>
+        <span class="cat-title">🍊 Sokovi & Čajevi</span>
+        <div class="cat-line"></div>
+      </div>
+
+      <div class="menu-item"><div class="item-info"><div class="item-name">Narančin sok — svježe cijeđen</div><div class="item-desc">3 naranče, cijeđeno na licu mjesta</div></div><div class="item-price">4,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Jabučni sok — prirodni</div><div class="item-desc">Mutni jabučni sok bez konzervansa, lokalni voćnjaci</div></div><div class="item-price">3,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Čaj — zeleni jasmin</div><div class="item-desc">Kineski zeleni čaj s jasminovim cvjetovima</div></div><div class="item-price">2,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Čaj — kamilica & med</div><div class="item-desc">Umirujući kamilični čaj s bosanskim livadarskim medom</div></div><div class="item-price">2,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Čaj — hibiskus</div><div class="item-desc">Osvježavajući cvijet hibiskusa, tart i voćan</div></div><div class="item-price">2,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Mineralna voda</div><div class="item-desc">Sarajevski kiseljak, 0.5l</div></div><div class="item-price">1,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Gazirana voda</div><div class="item-desc">Naturaqua sparkling, 0.5l</div></div><div class="item-price">2,00 KM</div></div>
+
+      <!-- PIVA -->
+      <div class="category-separator" data-cat="pivo">
+        <div class="cat-line"></div>
+        <span class="cat-title">🍺 Piva & Craft</span>
+        <div class="cat-line"></div>
+      </div>
+
+      <div class="menu-item"><div class="item-info"><div class="item-name">Sarajevsko — točeno</div><div class="item-desc">Lokalno pivo, svježe točeno, 0.5l</div></div><div class="item-price">3,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Heineken — točeno</div><div class="item-desc">Holandski lager, osvježavajuć, 0.5l</div></div><div class="item-price">4,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Corona Extra</div><div class="item-desc">Meksičko pivo, flašica 0.355l, servira se s limunom</div></div><div class="item-price">4,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Craft IPA — Hoppy Valley</div><div class="item-desc">Domaći India Pale Ale, intenzivna hmeljna aroma, 0.33l</div></div><div class="item-price">6,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Craft Wheat — Bijelo zlato</div><div class="item-desc">Pšenično pivo, voćne note, mutno i kremasto, 0.5l</div></div><div class="item-price">5,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Radler — limun</div><div class="item-desc">Pivo i limunada, idealno osvježenje, 0.5l</div></div><div class="item-price">3,50 KM</div></div>
+
+      <!-- VINA -->
+      <div class="category-separator" data-cat="vino">
+        <div class="cat-line"></div>
+        <span class="cat-title">🍷 Vina</span>
+        <div class="cat-line"></div>
+      </div>
+
+      <div class="menu-item"><div class="item-info"><div class="item-name">Žilavka — Hercegovina</div><div class="item-desc">Bijelo vino, suho, citrusne note, 0.15l</div></div><div class="item-price">5,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Blatina — Čitluk</div><div class="item-desc">Crno vino, suho, voćno, tipično bosansko, 0.15l</div></div><div class="item-price">5,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Plavac Mali — Pelješac</div><div class="item-desc">Dalmatinsko crno vino, tanini, šumsko voće, 0.15l</div></div><div class="item-price">6,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Prosecco — Veneto</div><div class="item-desc">Talijansko pjenušavo vino, svježe i elegantno, 0.15l</div></div><div class="item-price">6,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Rosé — Provence</div><div class="item-desc">Suhi rosé, jagoda, ruža, svježe kiselkasto, 0.15l</div></div><div class="item-price">6,00 KM</div></div>
+
+      <!-- SPIRITS & KOKTELI -->
+      <div class="category-separator" data-cat="spirits">
+        <div class="cat-line"></div>
+        <span class="cat-title">🥃 Spirits & Kokteli</span>
+        <div class="cat-line"></div>
+      </div>
+
+      <div class="menu-item"><div class="item-info"><div class="item-name">Espresso Martini</div><div class="item-desc">Vodka, Kahlúa, svježi espresso — naša bestseller</div></div><div class="item-price">9,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Aperol Spritz</div><div class="item-desc">Aperol, Prosecco, soda, naranča — terasa klasik</div></div><div class="item-price">8,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Mojito</div><div class="item-desc">Bijeli rum, svježa metvica, limeta, soda, trstinasti šećer</div></div><div class="item-price">8,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Negroni</div><div class="item-desc">Gin, Campari, sweet vermouth — gorka elegancija</div></div><div class="item-price">9,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Whiskey Sour</div><div class="item-desc">Bourbon, svježi limun, šećer, egg white pjena</div></div><div class="item-price">9,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Rakija — Šljiva</div><div class="item-desc">Domaća šljivovica, 0.03l — pravo bosansko zlatno blago</div></div><div class="item-price">4,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Loza — Grožđe</div><div class="item-desc">Balsam grape brandy, delikatna i mirisna, 0.03l</div></div><div class="item-price">3,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Jack Daniel's</div><div class="item-desc">Tennessee whiskey, 0.04l, sa ili bez leda</div></div><div class="item-price">6,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Jägermeister</div><div class="item-desc">Germanski biljni liker, 0.04l, hladan</div></div><div class="item-price">5,00 KM</div></div>
+
+      <!-- HRANA -->
+      <div class="category-separator" data-cat="hrana">
+        <div class="cat-line"></div>
+        <span class="cat-title">🥐 Hrana & Grickalice</span>
+        <div class="cat-line"></div>
+      </div>
+
+      <div class="menu-item"><div class="item-info"><div class="item-name">Kroasan — maslac</div><div class="item-desc">Svježe pečeni kroasan s maslacem i džemom od maline</div></div><div class="item-price">3,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Avocado toast</div><div class="item-desc">Domaći kruh, guacamole, cherry paradajz, jaje, feta</div></div><div class="item-price">7,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Bagel s lososom</div><div class="item-desc">Dimljeni losos, cream cheese, kapari, crveni luk</div></div><div class="item-price">9,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Bruschetta trio</div><div class="item-desc">Paradajz-bosiljak, ricotta-smokva, pašteta-cornichon</div></div><div class="item-price">7,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Sir pladanj</div><div class="item-desc">3 vrste sira, med, orah, grožđe, krekeri</div></div><div class="item-price">12,00 KM</div></div>
+
+      <!-- DESERTI -->
+      <div class="category-separator" data-cat="deserti">
+        <div class="cat-line"></div>
+        <span class="cat-title">🍰 Deserti</span>
+        <div class="cat-line"></div>
+      </div>
+
+      <div class="menu-item"><div class="item-info"><div class="item-name">Tiramisu</div><div class="item-desc">Klasični talijanski, savoiardi, mascarpone, espresso</div></div><div class="item-price">5,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Cheesecake — jagoda</div><div class="item-desc">New York style, svježe jagode, graham keksić osnova</div></div><div class="item-price">5,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Brownie — čokolada</div><div class="item-desc">Gusti čokoladni brownie s sladoledom od vanilije</div></div><div class="item-price">4,50 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Baklava</div><div class="item-desc">Domaća baklava, fistaci i med, 3 komada</div></div><div class="item-price">4,00 KM</div></div>
+      <div class="menu-item"><div class="item-info"><div class="item-name">Panna cotta</div><div class="item-desc">Kremasta talijanska panna cotta s umakom od maline</div></div><div class="item-price">5,00 KM</div></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<div class="about-section">
+  <div class="about-inner">
+    <div class="about-img fade-in"></div>
+    <div class="about-text fade-in">
+      <span class="section-label">Naša priča</span>
+      <h2 class="section-title" style="text-align:left; margin-bottom:1.5rem;">Kafić s dušom od 2008.</h2>
+      <p>La Dolce Vita nije samo kafić — to je mjesto gdje se usporava, gdje se razgovori vode bez žurbe, a svaka šoljica kave priprema se s pažnjom i strašću.</p>
+      <p>Smješteni u srcu Baščaršije, koristimo isključivo single-origin kave iz etiopske regije Yirgacheffe i kolumbijskog Huile. Svaki grain ručno sortiramo i pečemo u našoj micro-roastery radionici.</p>
+      <div class="about-stats">
+        <div><span class="stat-num">16</span><span class="stat-label">Godina tradicije</span></div>
+        <div><span class="stat-num">52+</span><span class="stat-label">Stavki u meniju</span></div>
+        <div><span class="stat-num">4.9★</span><span class="stat-label">Google ocjena</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div style="padding: 0; background: var(--dark);">
+  <div class="gallery">
+    <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800&q=80')"></div>
+    <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80')"></div>
+    <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1521302080334-4bebac2763a6?w=600&q=80')"></div>
+    <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1534040385115-33dcb3acba5b?w=600&q=80')"></div>
+    <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80')"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">La Dolce Vita</div>
+  <div class="footer-info">
+    📍 Baščaršija 14, Sarajevo &nbsp;|&nbsp; 📞 +387 33 456 789<br>
+    ✉️ info@ladolcevita.ba &nbsp;|&nbsp; 📸 @ladolcevita_sa
+  </div>
+  <div class="footer-hours">Pon–Pet: 07:00 – 23:00 &nbsp;|&nbsp; Sub–Ned: 08:00 – 00:00</div>
+  <div style="margin-top:2rem; font-size:0.7rem; color:#444; font-family:'Montserrat',sans-serif; letter-spacing:1px;">© 2024 La Dolce Vita. Sva prava zadržana.</div>
+</footer>
+
+<script>
+  // Intersection Observer for fade-in
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Category filter
+  function showSection(cat) {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    document.querySelectorAll('.category-separator, .menu-item').forEach(el => {
+      el.style.display = '';
+    });
+    if (cat !== 'all') {
+      const catMap = {
+        kave: ['kave'], hladna: ['hladna'], sokovi: ['sokovi'], pivo: ['pivo'],
+        vino: ['vino'], spirits: ['spirits'], hrana: ['hrana'], deserti: ['deserti']
+      };
+      document.querySelectorAll('.category-separator').forEach(sep => {
+        const sepCat = sep.getAttribute('data-cat');
+        if (!catMap[cat] || !catMap[cat].includes(sepCat)) {
+          sep.style.display = 'none';
+          let next = sep.nextElementSibling;
+          while (next && !next.classList.contains('category-separator')) {
+            next.style.display = 'none';
+            next = next.nextElementSibling;
+          }
+        }
+      });
+    }
+  }
+</script>
+</body>
+</html>
